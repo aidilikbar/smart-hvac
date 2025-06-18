@@ -47,7 +47,7 @@ export default function SmartHVACApp() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Smart HVAC Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">Smart HVAC Dashboard - Group 7</h1>
 
       <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
         <div className="flex gap-2">
