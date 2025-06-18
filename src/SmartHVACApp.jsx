@@ -1,4 +1,3 @@
-// src/SmartHVACApp.jsx
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 
@@ -30,18 +29,15 @@ export default function SmartHVACApp() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(EVENT_HUB_API);
-        const data = await res.json();
+        const response = await fetch(EVENT_HUB_API);
+        const data = await response.json();
         if (data && data.timestamp) {
-          setTelemetry((prev) => {
-            const updated = [...prev, data];
-            return updated.slice(-10); // keep latest 10 entries
-          });
+          setTelemetry((prev) => [data, ...prev.slice(0, 19)]);
         }
       } catch (error) {
-        console.error("Failed to fetch telemetry:", error);
+        console.error("Event fetch error:", error);
       }
-    }, 2000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -57,7 +53,6 @@ export default function SmartHVACApp() {
             onChange={(e) => setTwinId(e.target.value)}
           >
             <option value="hvac-ct-x100">hvac-ct-x100</option>
-            {/* Add more devices here if needed */}
           </select>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -84,7 +79,7 @@ export default function SmartHVACApp() {
         </div>
       )}
 
-      {telemetry.length > 0 && (
+      {twinData && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
           <h2 className="text-xl font-semibold mb-4">Digital Twin</h2>
           <div className="flex justify-center items-center gap-12">
@@ -96,37 +91,35 @@ export default function SmartHVACApp() {
                 className="w-10 h-10"
                 style={{
                   filter: (() => {
-                    const latest = telemetry[telemetry.length - 1];
+                    if (!telemetry.length) return 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)';
+                    const latest = telemetry[0];
                     return latest.status === 'OK'
-                      ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)' // green
-                      : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
+                      ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)'
+                      : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)';
                   })()
                 }}
               />
               <p className="text-sm text-gray-600 mt-1">Power</p>
             </div>
-
             {/* FAN ICON */}
             <div className="flex flex-col items-center">
               <img
                 src="/fan.svg"
                 alt="Fan Icon"
-                className={`w-10 h-10 ${
-                  telemetry[telemetry.length - 1].status === 'OK' ? 'animate-spin-slow' : ''
-                }`}
+                className={`w-10 h-10 ${telemetry.length && telemetry[0].status === 'OK' ? 'animate-spin-slow' : ''}`}
                 style={{
                   filter: (() => {
-                    const latest = telemetry[telemetry.length - 1];
-                    if (latest.status !== 'OK') return 'invert(0%)'; // black
-                    if (latest.temperature <= 21)
-                      return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
-                    return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
+                    if (!telemetry.length) return 'invert(0%)';
+                    const latest = telemetry[0];
+                    if (latest.status !== 'OK') return 'invert(0%)';
+                    return latest.temperature <= 21
+                      ? 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'
+                      : 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)';
                   })()
                 }}
               />
               <p className="text-sm text-gray-600 mt-1">Fan</p>
             </div>
-
             {/* HUMIDITY ICON */}
             <div className="flex flex-col items-center">
               <img
@@ -135,10 +128,11 @@ export default function SmartHVACApp() {
                 className="w-10 h-10"
                 style={{
                   filter: (() => {
-                    const latest = telemetry[telemetry.length - 1];
-                    if (latest.humidity <= 50)
-                      return 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'; // green
-                    return 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)'; // dark green
+                    if (!telemetry.length) return 'invert(0%)';
+                    const latest = telemetry[0];
+                    return latest.humidity <= 50
+                      ? 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'
+                      : 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)';
                   })()
                 }}
               />
@@ -154,7 +148,7 @@ export default function SmartHVACApp() {
           <p className="text-gray-500">Waiting for events...</p>
         ) : (
           <ul className="text-sm">
-            {[...telemetry].reverse().map((e, i) => (
+            {telemetry.map((e, i) => (
               <li key={i} className="mb-2 border-b pb-2">
                 <div><strong>Time:</strong> {e.timestamp}</div>
                 <div><strong>Temperature:</strong> {e.temperature}°C</div>
@@ -165,8 +159,6 @@ export default function SmartHVACApp() {
           </ul>
         )}
       </div>
-
-      {loading && <p className="mt-4 text-blue-600">Loading...</p>}
     </div>
   );
 }
