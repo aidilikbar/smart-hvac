@@ -83,6 +83,24 @@ export default function SmartHVACApp() {
           </div>
           <div className="mt-6">
             <div className="flex justify-center items-center gap-12">
+              {/* POWER ICON */}
+              <div className="flex flex-col items-center">
+                <img
+                  src="/power.svg"
+                  alt="Power Icon"
+                  className="w-10 h-10"
+                  style={{
+                    filter: (() => {
+                      if (!telemetry.length) return 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
+                      const latest = telemetry[telemetry.length - 1];
+                      return latest.status === 'OK'
+                        ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)' // green
+                        : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
+                    })()
+                  }}
+                />
+                <p className="text-sm text-gray-600 mt-1">Power</p>
+              </div>
               {/* FAN ICON */}
               <div className="flex flex-col items-center">
                 <img
