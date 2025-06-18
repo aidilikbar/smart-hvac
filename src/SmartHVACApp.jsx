@@ -51,12 +51,14 @@ export default function SmartHVACApp() {
 
       <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
         <div className="flex gap-2">
-          <input
+          <select
             className="border p-2 flex-grow rounded"
             value={twinId}
             onChange={(e) => setTwinId(e.target.value)}
-            placeholder="Enter Twin ID"
-          />
+          >
+            <option value="hvac-ct-x100">hvac-ct-x100</option>
+            {/* Add more devices here if needed */}
+          </select>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded"
             onClick={fetchTwinData}
