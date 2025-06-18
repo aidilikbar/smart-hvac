@@ -70,21 +70,6 @@ export default function SmartHVACApp() {
 
       {twinData && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          {/* SVG Fan Icon */}
-          <img
-            src="/air-conditioning.svg"
-            alt="HVAC Fan"
-            className="w-24 h-auto mb-4"
-            style={{
-              filter: (() => {
-                if (!telemetry.length) return 'invert(0%)'; // Black
-                const latest = telemetry[telemetry.length - 1];
-                if (latest.status !== 'OK') return 'invert(0%)'; // System not running = black
-                if (latest.temperature <= 21) return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
-                return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
-              })()
-            }}
-          />
           <h2 className="text-xl font-semibold mb-2">Digital Product Passport</h2>
           <p><strong>Manufacturer:</strong> {twinData.manufacturer}</p>
           <p><strong>Model:</strong> {twinData.model}</p>
@@ -96,6 +81,34 @@ export default function SmartHVACApp() {
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
+        </div>
+      )}
+
+      {telemetry.length > 0 && (
+        <div className="flex justify-center items-center gap-4 my-4">
+          {/* FAN ICON – based on temperature */}
+          <img
+            src="/fan.svg"
+            alt="Fan Icon"
+            className={`w-12 h-12 ${
+              telemetry[0].temperature <= 21
+                ? 'text-red-500'
+                : 'text-blue-500'
+            }`}
+          />
+
+          {/* HUMIDITY ICON – based on humidity */}
+          <img
+            src="/humidity.svg"
+            alt="Humidity Icon"
+            className={`w-12 h-12 ${
+              telemetry[0].humidity >= 40 && telemetry[0].humidity <= 50
+                ? 'text-green-500'
+                : telemetry[0].humidity >= 30 && telemetry[0].humidity <= 60
+                ? 'text-orange-400'
+                : 'text-red-500'
+            }`}
+          />
         </div>
       )}
 
