@@ -90,7 +90,7 @@ export default function SmartHVACApp() {
           <p className="text-gray-500">Waiting for events...</p>
         ) : (
           <ul className="text-sm">
-            {telemetry.map((e, i) => (
+            {[...telemetry].reverse().map((e, i) => (
               <li key={i} className="mb-2 border-b pb-2">
                 <div><strong>Time:</strong> {e.timestamp}</div>
                 <div><strong>Temperature:</strong> {e.temperature}°C</div>
