@@ -1,27 +1,45 @@
-import React, { useEffect, useState } from "react";
+// src/SmartHVACApp.jsx
+import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-import { fetchTwin } from "./api/fakeApi"; // Make sure this file exists
 
-function SmartHVACApp() {
+const EVENT_HUB_API = "/api/events"; // TODO: replace with actual API route if applicable
+
+export default function SmartHVACApp() {
   const [twinId, setTwinId] = useState("hvac-ct-x100");
   const [twinData, setTwinData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [telemetry, setTelemetry] = useState([]);
 
   const fetchTwinData = async () => {
-    setLoading(true);
     try {
-      const data = await fetchTwin(twinId); // local mock API
+      const response = await fetch(`/api/twin/${twinId}`);
+      const data = await response.json();
       setTwinData(data);
     } catch (error) {
       console.error("Error fetching twin data:", error);
-      setTwinData(null);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchTwinData();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(EVENT_HUB_API);
+        const data = await res.json();
+        if (data && data.timestamp) {
+          setTelemetry((prev) => {
+            const updated = [...prev, data];
+            return updated.slice(-10); // limit to 10 entries
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch telemetry:", error);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -46,7 +64,7 @@ function SmartHVACApp() {
       </div>
 
       {twinData && (
-        <div className="bg-white shadow rounded p-4 w-full max-w-xl">
+        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
           <h2 className="text-xl font-semibold mb-2">Digital Product Passport</h2>
           <p><strong>Manufacturer:</strong> {twinData.manufacturer}</p>
           <p><strong>Model:</strong> {twinData.model}</p>
@@ -61,9 +79,20 @@ function SmartHVACApp() {
         </div>
       )}
 
-      {loading && <p className="mt-4 text-blue-600">Loading...</p>}
+      <div className="bg-white shadow rounded p-4 w-full max-w-xl">
+        <h2 className="text-xl font-semibold mb-2">Live Telemetry</h2>
+        {telemetry.length === 0 ? (
+          <p className="text-gray-500">Waiting for events...</p>
+        ) : (
+          <ul className="space-y-2">
+            {telemetry.map((entry, idx) => (
+              <li key={idx} className="text-sm font-mono">
+                🕒 {entry.timestamp} | 🌡 Temp: {entry.temperature}°C | 💧 Humidity: {entry.humidity}% | Status: {entry.status}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
-
-export default SmartHVACApp;
