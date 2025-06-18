@@ -70,6 +70,21 @@ export default function SmartHVACApp() {
 
       {twinData && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
+          {/* SVG Fan Icon */}
+          <img
+            src="/air-conditioning.svg"
+            alt="HVAC Fan"
+            className="w-24 h-auto mb-4"
+            style={{
+              filter: (() => {
+                if (!telemetry.length) return 'invert(0%)'; // Black
+                const latest = telemetry[telemetry.length - 1];
+                if (latest.status !== 'OK') return 'invert(0%)'; // System not running = black
+                if (latest.temperature <= 21) return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
+                return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
+              })()
+            }}
+          />
           <h2 className="text-xl font-semibold mb-2">Digital Product Passport</h2>
           <p><strong>Manufacturer:</strong> {twinData.manufacturer}</p>
           <p><strong>Model:</strong> {twinData.model}</p>
