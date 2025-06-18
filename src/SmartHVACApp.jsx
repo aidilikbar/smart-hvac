@@ -81,70 +81,73 @@ export default function SmartHVACApp() {
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
-          <div className="mt-6">
-            <div className="flex justify-center items-center gap-12">
-              {/* POWER ICON */}
-              <div className="flex flex-col items-center">
-                <img
-                  src="/power.svg"
-                  alt="Power Icon"
-                  className="w-10 h-10"
-                  style={{
-                    filter: (() => {
-                      if (!telemetry.length) return 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
-                      const latest = telemetry[telemetry.length - 1];
-                      return latest.status === 'OK'
-                        ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)' // green
-                        : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
-                    })()
-                  }}
-                />
-                <p className="text-sm text-gray-600 mt-1">Power</p>
-              </div>
-              {/* FAN ICON */}
-              <div className="flex flex-col items-center">
-                <img
-                  src="/fan.svg"
-                  alt="Fan Icon"
-                  className="w-10 h-10"
-                  style={{
-                    filter: (() => {
-                      if (!telemetry.length) return 'invert(0%)'; // black
-                      const latest = telemetry[telemetry.length - 1];
-                      if (latest.status !== 'OK') return 'invert(0%)';
-                      if (latest.temperature <= 21)
-                        return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
-                      return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
-                    })()
-                  }}
-                />
-                <p className="text-sm text-gray-600 mt-1">Fan</p>
-              </div>
+        </div>
+      )}
 
-              {/* HUMIDITY ICON */}
-              <div className="flex flex-col items-center">
-                <img
-                  src="/humidity.svg"
-                  alt="Humidity Icon"
-                  className="w-10 h-10"
-                  style={{
-                    filter: (() => {
-                      if (!telemetry.length) return 'invert(0%)'; // black
-                      const latest = telemetry[telemetry.length - 1];
-                      if (latest.humidity <= 50)
-                        return 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'; // green
-                      return 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)'; // darker green
-                    })()
-                  }}
-                />
-                <p className="text-sm text-gray-600 mt-1">Humidifier</p>
-              </div>
+      {telemetry.length > 0 && (
+        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
+          <h2 className="text-xl font-semibold mb-4">Digital Twin</h2>
+          <div className="flex justify-center items-center gap-12">
+            {/* POWER ICON */}
+            <div className="flex flex-col items-center">
+              <img
+                src="/power.svg"
+                alt="Power Icon"
+                className="w-10 h-10"
+                style={{
+                  filter: (() => {
+                    const latest = telemetry[telemetry.length - 1];
+                    return latest.status === 'OK'
+                      ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)' // green
+                      : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)'; // red
+                  })()
+                }}
+              />
+              <p className="text-sm text-gray-600 mt-1">Power</p>
+            </div>
+
+            {/* FAN ICON */}
+            <div className="flex flex-col items-center">
+              <img
+                src="/fan.svg"
+                alt="Fan Icon"
+                className={`w-10 h-10 ${
+                  telemetry[telemetry.length - 1].status === 'OK' ? 'animate-spin-slow' : ''
+                }`}
+                style={{
+                  filter: (() => {
+                    const latest = telemetry[telemetry.length - 1];
+                    if (latest.status !== 'OK') return 'invert(0%)'; // black
+                    if (latest.temperature <= 21)
+                      return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
+                    return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
+                  })()
+                }}
+              />
+              <p className="text-sm text-gray-600 mt-1">Fan</p>
+            </div>
+
+            {/* HUMIDITY ICON */}
+            <div className="flex flex-col items-center">
+              <img
+                src="/humidity.svg"
+                alt="Humidity Icon"
+                className="w-10 h-10"
+                style={{
+                  filter: (() => {
+                    const latest = telemetry[telemetry.length - 1];
+                    if (latest.humidity <= 50)
+                      return 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'; // green
+                    return 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)'; // dark green
+                  })()
+                }}
+              />
+              <p className="text-sm text-gray-600 mt-1">Humidifier</p>
             </div>
           </div>
         </div>
       )}
 
-      
       <div className="bg-white shadow rounded p-4 w-full max-w-xl">
         <h2 className="text-xl font-semibold mb-2">Live Telemetry</h2>
         {telemetry.length === 0 ? (
