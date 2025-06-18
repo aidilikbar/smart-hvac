@@ -2,20 +2,24 @@
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 
-const EVENT_HUB_API = "/api/events"; // TODO: replace with actual API route if applicable
+const EVENT_HUB_API = "/api/events";
 
 export default function SmartHVACApp() {
   const [twinId, setTwinId] = useState("hvac-ct-x100");
   const [twinData, setTwinData] = useState(null);
   const [telemetry, setTelemetry] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchTwinData = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/twin/${twinId}`);
       const data = await response.json();
       setTwinData(data);
     } catch (error) {
       console.error("Error fetching twin data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,14 +35,13 @@ export default function SmartHVACApp() {
         if (data && data.timestamp) {
           setTelemetry((prev) => {
             const updated = [...prev, data];
-            return updated.slice(-10); // limit to 10 entries
+            return updated.slice(-10); // keep latest 10 entries
           });
         }
       } catch (error) {
         console.error("Failed to fetch telemetry:", error);
       }
     }, 2000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -84,15 +87,20 @@ export default function SmartHVACApp() {
         {telemetry.length === 0 ? (
           <p className="text-gray-500">Waiting for events...</p>
         ) : (
-          <ul className="space-y-2">
-            {telemetry.map((entry, idx) => (
-              <li key={idx} className="text-sm font-mono">
-                🕒 {entry.timestamp} | 🌡 Temp: {entry.temperature}°C | 💧 Humidity: {entry.humidity}% | Status: {entry.status}
+          <ul className="text-sm">
+            {telemetry.map((e, i) => (
+              <li key={i} className="mb-2 border-b pb-2">
+                <div><strong>Time:</strong> {e.timestamp}</div>
+                <div><strong>Temperature:</strong> {e.temperature}°C</div>
+                <div><strong>Humidity:</strong> {e.humidity}%</div>
+                <div><strong>Status:</strong> {e.status}</div>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      {loading && <p className="mt-4 text-blue-600">Loading...</p>}
     </div>
   );
 }
