@@ -159,6 +159,7 @@ export default function SmartHVACApp() {
           </ul>
         )}
       </div>
+      {loading && <p className="mt-4 text-blue-600">Loading...</p>}
     </div>
   );
 }
