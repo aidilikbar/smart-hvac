@@ -81,37 +81,37 @@ export default function SmartHVACApp() {
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
+          {telemetry.length > 0 && (
+            <div className="flex justify-center items-center gap-4 my-4">
+              {/* FAN ICON – based on temperature */}
+              <img
+                src="/fan.svg"
+                alt="Fan Icon"
+                className={`w-12 h-12 ${
+                  telemetry[0].temperature <= 21
+                    ? 'text-red-500'
+                    : 'text-blue-500'
+                }`}
+              />
+
+              {/* HUMIDITY ICON – based on humidity */}
+              <img
+                src="/humidity.svg"
+                alt="Humidity Icon"
+                className={`w-12 h-12 ${
+                  telemetry[0].humidity >= 40 && telemetry[0].humidity <= 50
+                    ? 'text-green-500'
+                    : telemetry[0].humidity >= 30 && telemetry[0].humidity <= 60
+                    ? 'text-orange-400'
+                    : 'text-red-500'
+                }`}
+              />
+            </div>
+          )}
         </div>
       )}
 
-      {telemetry.length > 0 && (
-        <div className="flex justify-center items-center gap-4 my-4">
-          {/* FAN ICON – based on temperature */}
-          <img
-            src="/fan.svg"
-            alt="Fan Icon"
-            className={`w-12 h-12 ${
-              telemetry[0].temperature <= 21
-                ? 'text-red-500'
-                : 'text-blue-500'
-            }`}
-          />
-
-          {/* HUMIDITY ICON – based on humidity */}
-          <img
-            src="/humidity.svg"
-            alt="Humidity Icon"
-            className={`w-12 h-12 ${
-              telemetry[0].humidity >= 40 && telemetry[0].humidity <= 50
-                ? 'text-green-500'
-                : telemetry[0].humidity >= 30 && telemetry[0].humidity <= 60
-                ? 'text-orange-400'
-                : 'text-red-500'
-            }`}
-          />
-        </div>
-      )}
-
+      
       <div className="bg-white shadow rounded p-4 w-full max-w-xl">
         <h2 className="text-xl font-semibold mb-2">Live Telemetry</h2>
         {telemetry.length === 0 ? (
