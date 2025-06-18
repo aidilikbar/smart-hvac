@@ -81,33 +81,36 @@ export default function SmartHVACApp() {
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
-          {telemetry.length > 0 && (
-            <div className="flex justify-center items-center gap-4 my-4">
-              {/* FAN ICON – based on temperature */}
-              <img
-                src="/fan.svg"
-                alt="Fan Icon"
-                className={`w-12 h-12 ${
-                  telemetry[0].temperature <= 21
-                    ? 'text-red-500'
-                    : 'text-blue-500'
-                }`}
-              />
+          {/* FAN Icon – color based on temperature */}
+          <img
+            src="/fan.svg"
+            alt="Fan"
+            className="w-16 h-auto mb-2 mx-auto"
+            style={{
+              filter: (() => {
+                if (!telemetry.length) return 'invert(0%)'; // black
+                const latest = telemetry[telemetry.length - 1];
+                if (latest.status !== 'OK') return 'invert(0%)'; // system not running
+                if (latest.temperature <= 21) return 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'; // red
+                return 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)'; // blue
+              })()
+            }}
+          />
 
-              {/* HUMIDITY ICON – based on humidity */}
-              <img
-                src="/humidity.svg"
-                alt="Humidity Icon"
-                className={`w-12 h-12 ${
-                  telemetry[0].humidity >= 40 && telemetry[0].humidity <= 50
-                    ? 'text-green-500'
-                    : telemetry[0].humidity >= 30 && telemetry[0].humidity <= 60
-                    ? 'text-orange-400'
-                    : 'text-red-500'
-                }`}
-              />
-            </div>
-          )}
+          {/* HUMIDITY Icon – color based on humidity */}
+          <img
+            src="/humidity.svg"
+            alt="Humidity"
+            className="w-16 h-auto mb-4 mx-auto"
+            style={{
+              filter: (() => {
+                if (!telemetry.length) return 'invert(0%)'; // black
+                const latest = telemetry[telemetry.length - 1];
+                if (latest.humidity <= 50) return 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'; // green
+                return 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)'; // orange/yellow
+              })()
+            }}
+          />
         </div>
       )}
 
