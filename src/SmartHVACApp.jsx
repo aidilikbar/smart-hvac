@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
+import axios from "axios";
 
 const EVENT_HUB_API = "/api/events";
 
@@ -23,16 +24,23 @@ export default function SmartHVACApp() {
     }
   };
 
+  const handleTogglePower = async () => {
+    try {
+      await axios.post(`/api/twin/${twinId}/toggle-power`);
+      console.log("✅ Power toggle command sent");
+    } catch (error) {
+      console.error("Error sending toggle command:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTwinData();
   }, []);
 
   useEffect(() => {
     if (telemetry.length > 0) {
-      const latest = telemetry[telemetry.length - 1];
-      if (latest.location) {
-        setLocation(latest.location);
-      }
+      const latest = telemetry[0];
+      if (latest.location) setLocation(latest.location);
     }
   }, [telemetry]);
 
@@ -89,86 +97,80 @@ export default function SmartHVACApp() {
         </div>
       )}
 
+      <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
+        <h2 className="text-xl font-semibold mb-4">Digital Twin</h2>
+        <div className="flex justify-center items-center gap-12">
+          {/* Power Icon */}
+          <div className="flex flex-col items-center">
+            <img
+              src="/power.svg"
+              className="w-10 h-10"
+              style={{
+                filter: telemetry[0]?.status === 'OK'
+                  ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)' // green
+                  : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)' // red
+              }}
+            />
+            <p className="text-sm text-gray-600 mt-1">Power</p>
+          </div>
+          {/* Fan Icon */}
+          <div className="flex flex-col items-center">
+            <img
+              src="/fan.svg"
+              className={`w-10 h-10 ${telemetry[0]?.status === 'OK' ? 'animate-spin' : ''}`}
+              style={{
+                filter: (() => {
+                  const t = telemetry[0]?.temperature;
+                  if (t === undefined) return 'invert(0%)';
+                  return t <= 21
+                    ? 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'
+                    : 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)';
+                })()
+              }}
+            />
+            <p className="text-sm text-gray-600 mt-1">Fan</p>
+          </div>
+          {/* Humidity Icon */}
+          <div className="flex flex-col items-center">
+            <img
+              src="/humidity.svg"
+              className="w-10 h-10"
+              style={{
+                filter: (() => {
+                  const h = telemetry[0]?.humidity;
+                  if (h === undefined) return 'invert(0%)';
+                  return h <= 50
+                    ? 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)' // green
+                    : 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)'; // darker green
+                })()
+              }}
+            />
+            <p className="text-sm text-gray-600 mt-1">Humidifier</p>
+          </div>
+        </div>
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleTogglePower}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Toggle Power
+          </button>
+        </div>
+      </div>
+
       {location && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          <h2 className="text-xl font-semibold mb-2">Device Location</h2>
+          <h2 className="text-xl font-semibold mb-2">Location</h2>
+          <p><strong>Latitude:</strong> {location.lat}</p>
+          <p><strong>Longitude:</strong> {location.lon}</p>
           <iframe
-            title="HVAC Location"
-            width="100%"
-            height="300"
-            frameBorder="0"
-            scrolling="no"
-            marginHeight="0"
-            marginWidth="0"
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.longitude - 0.01}%2C${location.latitude - 0.01}%2C${location.longitude + 0.01}%2C${location.latitude + 0.01}&layer=mapnik&marker=${location.latitude}%2C${location.longitude}`}
-            style={{ borderRadius: '0.5rem' }}
+            className="mt-2 w-full h-64"
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.lon-0.01}%2C${location.lat-0.01}%2C${location.lon+0.01}%2C${location.lat+0.01}&layer=mapnik&marker=${location.lat}%2C${location.lon}`}
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
-          <p className="mt-2 text-sm text-gray-600">
-            Lat: {location.latitude}, Lng: {location.longitude}
-          </p>
-        </div>
-      )}
-
-      {twinData && (
-        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          <h2 className="text-xl font-semibold mb-4">Digital Twin</h2>
-          <div className="flex justify-center items-center gap-12">
-            {/* POWER ICON */}
-            <div className="flex flex-col items-center">
-              <img
-                src="/power.svg"
-                alt="Power Icon"
-                className="w-10 h-10"
-                style={{
-                  filter: (() => {
-                    if (!telemetry.length) return 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)';
-                    const latest = telemetry[0];
-                    return latest.status === 'OK'
-                      ? 'invert(58%) sepia(75%) saturate(600%) hue-rotate(90deg)'
-                      : 'invert(28%) sepia(95%) saturate(950%) hue-rotate(-25deg)';
-                  })()
-                }}
-              />
-              <p className="text-sm text-gray-600 mt-1">Power</p>
-            </div>
-            {/* FAN ICON */}
-            <div className="flex flex-col items-center">
-              <img
-                src="/fan.svg"
-                alt="Fan Icon"
-                className={`w-10 h-10 ${telemetry.length && telemetry[0].status === 'OK' ? 'animate-spin-slow' : ''}`}
-                style={{
-                  filter: (() => {
-                    if (!telemetry.length) return 'invert(0%)';
-                    const latest = telemetry[0];
-                    if (latest.status !== 'OK') return 'invert(0%)';
-                    return latest.temperature <= 21
-                      ? 'invert(25%) sepia(100%) saturate(700%) hue-rotate(-50deg)'
-                      : 'invert(40%) sepia(100%) saturate(1000%) hue-rotate(190deg)';
-                  })()
-                }}
-              />
-              <p className="text-sm text-gray-600 mt-1">Fan</p>
-            </div>
-            {/* HUMIDITY ICON */}
-            <div className="flex flex-col items-center">
-              <img
-                src="/humidity.svg"
-                alt="Humidity Icon"
-                className="w-10 h-10"
-                style={{
-                  filter: (() => {
-                    if (!telemetry.length) return 'invert(0%)';
-                    const latest = telemetry[0];
-                    return latest.humidity <= 50
-                      ? 'invert(70%) sepia(50%) saturate(1000%) hue-rotate(90deg)'
-                      : 'invert(60%) sepia(70%) saturate(800%) hue-rotate(10deg)';
-                  })()
-                }}
-              />
-              <p className="text-sm text-gray-600 mt-1">Humidifier</p>
-            </div>
-          </div>
         </div>
       )}
 
@@ -181,7 +183,7 @@ export default function SmartHVACApp() {
             {telemetry.map((e, i) => (
               <li key={i} className="mb-2 border-b pb-2">
                 <div><strong>Time:</strong> {e.timestamp}</div>
-                <div><strong>Temperature:</strong> {e.temperature}°C</div>
+                <div><strong>Temperature:</strong> {e.temperature}&#8451;</div>
                 <div><strong>Humidity:</strong> {e.humidity}%</div>
                 <div><strong>Status:</strong> {e.status}</div>
               </li>
@@ -189,6 +191,7 @@ export default function SmartHVACApp() {
           </ul>
         )}
       </div>
+
       {loading && <p className="mt-4 text-blue-600">Loading...</p>}
     </div>
   );
