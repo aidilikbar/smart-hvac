@@ -12,6 +12,10 @@ function generateTelemetryData() {
     temperature: (20 + Math.random() * 10).toFixed(2),
     humidity: (40 + Math.random() * 20).toFixed(1),
     status: "OK",
+    location: {
+      latitude: 52.2394,
+      longitude: 6.8529
+    }
   };
 }
 

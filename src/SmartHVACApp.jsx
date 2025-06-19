@@ -8,6 +8,7 @@ export default function SmartHVACApp() {
   const [twinData, setTwinData] = useState(null);
   const [telemetry, setTelemetry] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState(null);
 
   const fetchTwinData = async () => {
     setLoading(true);
@@ -25,6 +26,15 @@ export default function SmartHVACApp() {
   useEffect(() => {
     fetchTwinData();
   }, []);
+
+  useEffect(() => {
+    if (telemetry.length > 0) {
+      const latest = telemetry[telemetry.length - 1];
+      if (latest.location) {
+        setLocation(latest.location);
+      }
+    }
+  }, [telemetry]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -76,6 +86,26 @@ export default function SmartHVACApp() {
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
+        </div>
+      )}
+
+      {location && (
+        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
+          <h2 className="text-xl font-semibold mb-2">Device Location</h2>
+          <iframe
+            title="HVAC Location"
+            width="100%"
+            height="300"
+            frameBorder="0"
+            scrolling="no"
+            marginHeight="0"
+            marginWidth="0"
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.longitude - 0.01}%2C${location.latitude - 0.01}%2C${location.longitude + 0.01}%2C${location.latitude + 0.01}&layer=mapnik&marker=${location.latitude}%2C${location.longitude}`}
+            style={{ borderRadius: '0.5rem' }}
+          ></iframe>
+          <p className="mt-2 text-sm text-gray-600">
+            Lat: {location.latitude}, Lng: {location.longitude}
+          </p>
         </div>
       )}
 
