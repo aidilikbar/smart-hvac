@@ -9,7 +9,6 @@ export default function SmartHVACApp() {
   const [telemetry, setTelemetry] = useState([]);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(null);
-  const [isPublishing, setIsPublishing] = useState(false);
 
   const fetchTwinData = async () => {
     setLoading(true);
@@ -172,25 +171,6 @@ export default function SmartHVACApp() {
           </div>
         </div>
       )}
-
-      <div className="flex items-center justify-center mt-6">
-        <button
-          className={`px-4 py-2 font-semibold rounded shadow ${
-            isPublishing ? 'bg-red-600 text-white' : 'bg-green-600 text-white'
-          }`}
-          onClick={async () => {
-            const endpoint = isPublishing ? '/api/stop' : '/api/start';
-            try {
-              await fetch(`http://localhost:4000${endpoint}`, { method: 'POST' });
-              setIsPublishing(!isPublishing);
-            } catch (err) {
-              console.error("Error toggling HVAC:", err);
-            }
-          }}
-        >
-          {isPublishing ? 'Stop HVAC' : 'Start HVAC'}
-        </button>
-      </div>
 
       <div className="bg-white shadow rounded p-4 w-full max-w-xl">
         <h2 className="text-xl font-semibold mb-2">Live Telemetry</h2>
