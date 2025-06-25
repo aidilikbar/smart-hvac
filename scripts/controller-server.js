@@ -1,42 +1,39 @@
-// controller-server.js
+// scripts/controller-server.js
 const express = require('express');
-const { spawn } = require('child_process');
-const path = require('path');
 const cors = require('cors');
+const path = require('path');
+const { spawn } = require('child_process');
 
 const app = express();
-const PORT = 3000;
-
+const port = 3000;
 let publisherProcess = null;
 
 app.use(cors());
+app.use(express.static(path.join(__dirname, '../control-ui'))); // Serve UI files
 
-// Start publisher.js
 app.get('/control/start', (req, res) => {
   if (publisherProcess) {
-    return res.status(400).send('Publisher already running');
+    return res.json({ message: 'HVAC already running.' });
   }
 
-  const scriptPath = path.join(__dirname, 'publisher.js');
-  publisherProcess = spawn('node', [scriptPath], { stdio: 'inherit' });
+  publisherProcess = spawn('npm', ['run', 'publish-event'], {
+    cwd: path.join(__dirname, '..'),
+    shell: true,
+    stdio: 'inherit'
+  });
 
-  console.log('✅ Publisher started');
-  res.send('Publisher started');
+  res.json({ message: 'HVAC started.' });
 });
 
-// Stop publisher.js
 app.get('/control/stop', (req, res) => {
-  if (!publisherProcess) {
-    return res.status(400).send('Publisher not running');
+  if (publisherProcess) {
+    publisherProcess.kill('SIGINT');
+    publisherProcess = null;
+    return res.json({ message: 'HVAC stopped.' });
   }
-
-  publisherProcess.kill('SIGINT');
-  publisherProcess = null;
-
-  console.log('🛑 Publisher stopped');
-  res.send('Publisher stopped');
+  res.json({ message: 'HVAC not running.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🛠️ Controller server running at http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`✅ Controller server running at http://localhost:${port}`);
 });

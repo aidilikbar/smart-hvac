@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HVAC Remote Control</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; }
+    button { padding: 0.5rem 1rem; margin-right: 1rem; font-size: 16px; }
+    #status { margin-top: 1rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Smart HVAC Remote Control</h1>
+  <button onclick="startHVAC()">Start HVAC</button>
+  <button onclick="stopHVAC()">Stop HVAC</button>
+  <div id="status">Status: Idle</div>
+
+  <script>
+    async function startHVAC() {
+      const res = await fetch('/control/start');
+      const data = await res.json();
+      document.getElementById('status').innerText = 'Status: ' + data.message;
+    }
+
+    async function stopHVAC() {
+      const res = await fetch('/control/stop');
+      const data = await res.json();
+      document.getElementById('status').innerText = 'Status: ' + data.message;
+    }
+  </script>
+</body>
+</html>
