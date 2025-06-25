@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from 'axios';
 import QRCode from "react-qr-code";
 
 const EVENT_HUB_API = "/api/events";
@@ -9,6 +10,25 @@ export default function SmartHVACApp() {
   const [telemetry, setTelemetry] = useState([]);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(null);
+  const [controlMessage, setControlMessage] = useState('');
+
+  const handleStart = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/control/start');
+      setControlMessage(res.data.message || 'Started!');
+    } catch (err) {
+      setControlMessage('Failed to start HVAC.');
+    }
+  };
+
+  const handleStop = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/control/stop');
+      setControlMessage(res.data.message || 'Stopped!');
+    } catch (err) {
+      setControlMessage('Failed to stop HVAC.');
+    }
+  };
 
   const fetchTwinData = async () => {
     setLoading(true);
@@ -56,7 +76,7 @@ export default function SmartHVACApp() {
       <h1 className="text-2xl font-bold mb-4">Smart HVAC Dashboard - Group 7</h1>
 
       <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <select
             className="border p-2 flex-grow rounded"
             value={twinId}
@@ -70,7 +90,22 @@ export default function SmartHVACApp() {
           >
             Fetch
           </button>
+          <button
+            onClick={handleStart}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Start HVAC
+          </button>
+          <button
+            onClick={handleStop}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          >
+            Stop HVAC
+          </button>
         </div>
+        {controlMessage && (
+          <p className="mt-3 text-sm text-gray-700">{controlMessage}</p>
+        )}
       </div>
 
       {twinData && (
