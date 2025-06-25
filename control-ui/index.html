@@ -2,30 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>HVAC Remote Control</title>
-  <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; }
-    button { padding: 0.5rem 1rem; margin-right: 1rem; font-size: 16px; }
-    #status { margin-top: 1rem; font-weight: bold; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart HVAC Remote Control</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Smart HVAC Remote Control</h1>
-  <button onclick="startHVAC()">Start HVAC</button>
-  <button onclick="stopHVAC()">Stop HVAC</button>
-  <div id="status">Status: Idle</div>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-lg rounded-xl p-6 max-w-md w-full">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
+      Smart HVAC Remote Control
+    </h1>
+
+    <!-- Twin ID Selection -->
+    <div class="mb-4">
+      <label for="twinId" class="block text-sm font-medium text-gray-700 mb-1">Select HVAC ID:</label>
+      <select
+        id="twinId"
+        class="border rounded px-3 py-2 w-full"
+      >
+        <option value="hvac-ct-x100">hvac-ct-x100</option>
+        <!-- Add more options if needed -->
+      </select>
+    </div>
+
+    <!-- Start/Stop Buttons -->
+    <div class="flex justify-center space-x-4 mb-4">
+      <button
+        onclick="startHVAC()"
+        class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded"
+      >
+        Start HVAC
+      </button>
+      <button
+        onclick="stopHVAC()"
+        class="bg-red-600 hover:bg-red-700 text-white font-medium px-5 py-2 rounded"
+      >
+        Stop HVAC
+      </button>
+    </div>
+
+    <p id="status" class="text-center text-gray-700 text-sm">Status: Ready</p>
+  </div>
 
   <script>
-    async function startHVAC() {
-      const res = await fetch('/control/start');
-      const data = await res.json();
-      document.getElementById('status').innerText = 'Status: ' + data.message;
+    function getTwinId() {
+      return document.getElementById("twinId").value;
     }
 
-    async function stopHVAC() {
-      const res = await fetch('/control/stop');
-      const data = await res.json();
-      document.getElementById('status').innerText = 'Status: ' + data.message;
+    function startHVAC() {
+      const twinId = getTwinId();
+      fetch(`/control/start?twinId=${encodeURIComponent(twinId)}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("status").textContent = "Status: " + data.message;
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "Status: Failed to start HVAC.";
+        });
+    }
+
+    function stopHVAC() {
+      const twinId = getTwinId();
+      fetch(`/control/stop?twinId=${encodeURIComponent(twinId)}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("status").textContent = "Status: " + data.message;
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "Status: Failed to stop HVAC.";
+        });
     }
   </script>
 </body>

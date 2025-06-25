@@ -76,7 +76,7 @@ export default function SmartHVACApp() {
       <h1 className="text-2xl font-bold mb-4">Smart HVAC Dashboard - Group 7</h1>
 
       <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2">
           <select
             className="border p-2 flex-grow rounded"
             value={twinId}
@@ -90,22 +90,7 @@ export default function SmartHVACApp() {
           >
             Fetch
           </button>
-          <button
-            onClick={handleStart}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Start HVAC
-          </button>
-          <button
-            onClick={handleStop}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-          >
-            Stop HVAC
-          </button>
         </div>
-        {controlMessage && (
-          <p className="mt-3 text-sm text-gray-700">{controlMessage}</p>
-        )}
       </div>
 
       {twinData && (
