@@ -22,6 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "control-server": "node controller-server.js",
     "publish-event": "node scripts/publisher.js",
     "listen-events": "node scripts/subscriber.js"
   },
