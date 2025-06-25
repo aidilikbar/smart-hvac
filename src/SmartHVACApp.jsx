@@ -9,6 +9,7 @@ export default function SmartHVACApp() {
   const [telemetry, setTelemetry] = useState([]);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(null);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const fetchTwinData = async () => {
     setLoading(true);
