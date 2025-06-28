@@ -7,10 +7,14 @@ const eventHubName = process.env.EVENT_HUB_NAME;
 const producer = new EventHubProducerClient(connectionString, eventHubName);
 
 function generateTelemetryData() {
+  const temperature = 20 + Math.random() * 10;
+  const humidity = 40 + Math.random() * 20;
+
   return {
     timestamp: new Date().toISOString(),
-    temperature: (20 + Math.random() * 10).toFixed(2),
-    humidity: (40 + Math.random() * 20).toFixed(1),
+    temperature: temperature.toFixed(2), //°C (Celsius)
+    humidity: humidity.toFixed(1), //% (percentage)
+    energy: (temperature * 0.15 + humidity * 0.05).toFixed(2), //kWh (kilowatt-hours)
     status: "OK",
     location: {
       latitude: 52.2394,
