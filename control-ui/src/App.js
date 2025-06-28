@@ -44,12 +44,13 @@ function App() {
           </select>
         </div>
 
-        {/* HVAC Image here */}
-        <img
-          src="/hvac-unit.png"
-          alt="HVAC Unit"
-          className="w-full max-w-xs mx-auto my-4"
-        />
+        <div className="flex justify-center mb-4">
+          <img
+            src="/hvac-unit.png"
+            alt="HVAC Unit"
+            className="w-full max-w-sm rounded shadow-md"
+          />
+        </div>
 
         <div className="flex gap-4 justify-center mt-4">
           <button

@@ -10,6 +10,7 @@ let publisherProcess = null;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../control-ui'))); // Serve UI files
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/control/start', (req, res) => {
   if (publisherProcess) {
