@@ -265,8 +265,8 @@ export default function SmartHVACApp() {
         {telemetryData.length > 0 && (
           <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
             <h3 className="text-lg font-semibold mb-2">Live Telemetry</h3>
-            {telemetryData.map((item, index) => (
-              <div key={index} className="border-b border-gray-200 pb-2 mb-2">
+            {telemetry.map((item, index) => (
+              <div key={index} className="mb-4">
                 <p><strong>Time:</strong> {item.timestamp}</p>
                 <p><strong>Temperature:</strong> {item.temperature}°C</p>
                 <p><strong>Humidity:</strong> {item.humidity}%</p>
