@@ -25,13 +25,13 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white shadow rounded p-6 w-full max-w-xl">
+      <div className="bg-white shadow rounded p-6 w-full max-w-xl text-center">
         <h1 className="text-xl font-semibold text-gray-800 mb-4">
           Smart HVAC Remote Control
         </h1>
-        
+
         <div className="mb-4">
-          <label htmlFor="hvac-select" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="hvac-select" className="block text-sm font-medium text-gray-700 mb-1 text-left">
             Select HVAC ID:
           </label>
           <select
@@ -44,7 +44,14 @@ function App() {
           </select>
         </div>
 
-        <div className="flex gap-4 mt-4">
+        {/* HVAC Image here */}
+        <img
+          src="/hvac-unit.png"
+          alt="HVAC Unit"
+          className="w-full max-w-xs mx-auto my-4"
+        />
+
+        <div className="flex gap-4 justify-center mt-4">
           <button
             onClick={handleStart}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium"
