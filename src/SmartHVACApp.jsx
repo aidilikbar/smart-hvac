@@ -271,6 +271,7 @@ export default function SmartHVACApp() {
                 <div><strong>Time:</strong> {e.timestamp}</div>
                 <div><strong>Temperature:</strong> {e.temperature}°C</div>
                 <div><strong>Humidity:</strong> {e.humidity}%</div>
+                <div><strong>Energy:</strong> {item.energy} kWh</div>
                 <div><strong>Status:</strong> {e.status}</div>
               </li>
             ))}
