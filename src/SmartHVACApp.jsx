@@ -95,14 +95,26 @@ export default function SmartHVACApp() {
 
       {twinData && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          <h2 className="text-xl font-semibold mb-2">Digital Product Passport</h2>
-          <p><strong>Manufacturer:</strong> {twinData.manufacturer}</p>
-          <p><strong>Model:</strong> {twinData.model}</p>
-          <p><strong>Serial Number:</strong> {twinData.serialNumber}</p>
-          <p><strong>Energy Rating:</strong> {twinData.energyEfficiencyRating}</p>
-          <p><strong>Firmware:</strong> {twinData.firmwareVersion}</p>
-          <p><strong>Installation Date:</strong> {twinData.installationDate}</p>
-          <p><strong>Recyclability:</strong> {twinData.recyclability}</p>
+          <h2 className="text-lg font-semibold mb-3">Digital Product Passport</h2>
+          <p><strong>Manufacturer:</strong> {dpp.manufacturer}</p>
+          <p><strong>Model:</strong> {dpp.model}</p>
+          <p><strong>Serial Number:</strong> {dpp.serialNumber}</p>
+          <p><strong>Product Code:</strong> {dpp.productCode}</p>
+          <p><strong>Markings:</strong> {dpp.markings.join(", ")}</p>
+          <p><strong>Year of Manufacture:</strong> {dpp.yearOfManufacture}</p>
+          <p><strong>Firmware:</strong> {dpp.firmwareVersion}</p>
+          <p><strong>Installation Date:</strong> {dpp.installationDate}</p>
+          <p><strong>Energy Rating:</strong> {dpp.energyEfficiencyRating}</p>
+          <p><strong>Rated Voltage:</strong> {dpp.ratedVoltage}</p>
+          <p><strong>Rated Current:</strong> {dpp.ratedCurrent}</p>
+          <p><strong>Power Consumption:</strong> {dpp.powerConsumption}</p>
+          <p><strong>Operating Temp:</strong> {dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</p>
+          <p><strong>Dimensions (HxWxD):</strong> {`${dpp.height} x ${dpp.width} x ${dpp.depth}`}</p>
+          <p><strong>Weight:</strong> {dpp.weight}</p>
+          <p><strong>Material:</strong> {dpp.housingMaterial}</p>
+          <p><strong>Color:</strong> {dpp.color}</p>
+          <p><strong>Recyclability:</strong> {dpp.recyclability}</p>
+          <p><strong>Carbon Footprint:</strong> {dpp.carbonFootprint}</p>
           <div className="mt-4">
             <QRCode value={twinId} size={100} />
           </div>
