@@ -11,6 +11,7 @@ export default function SmartHVACApp() {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(null);
   const [controlMessage, setControlMessage] = useState('');
+  const [dpp, setDpp] = useState(null);
 
   const handleStart = async () => {
     try {
@@ -31,15 +32,13 @@ export default function SmartHVACApp() {
   };
 
   const fetchTwinData = async () => {
-    setLoading(true);
     try {
-      const response = await fetch(`/api/twin/${twinId}`);
-      const data = await response.json();
-      setTwinData(data);
-    } catch (error) {
-      console.error("Error fetching twin data:", error);
-    } finally {
-      setLoading(false);
+      const twinRes = await axios.get(`/api/twin/${twinId}`);
+      setDpp(twinRes.data); // Store DPP in state
+      setControlMessage("Twin data fetched successfully!");
+    } catch (err) {
+      console.error(err);
+      setControlMessage("Failed to fetch twin data.");
     }
   };
 
@@ -93,31 +92,30 @@ export default function SmartHVACApp() {
         </div>
       </div>
 
-      {twinData && (
+      {dpp && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          <h2 className="text-lg font-semibold mb-3">Digital Product Passport</h2>
-          <p><strong>Manufacturer:</strong> {dpp.manufacturer}</p>
-          <p><strong>Model:</strong> {dpp.model}</p>
-          <p><strong>Serial Number:</strong> {dpp.serialNumber}</p>
-          <p><strong>Product Code:</strong> {dpp.productCode}</p>
-          <p><strong>Markings:</strong> {dpp.markings.join(", ")}</p>
-          <p><strong>Year of Manufacture:</strong> {dpp.yearOfManufacture}</p>
-          <p><strong>Firmware:</strong> {dpp.firmwareVersion}</p>
-          <p><strong>Installation Date:</strong> {dpp.installationDate}</p>
-          <p><strong>Energy Rating:</strong> {dpp.energyEfficiencyRating}</p>
-          <p><strong>Rated Voltage:</strong> {dpp.ratedVoltage}</p>
-          <p><strong>Rated Current:</strong> {dpp.ratedCurrent}</p>
-          <p><strong>Power Consumption:</strong> {dpp.powerConsumption}</p>
-          <p><strong>Operating Temp:</strong> {dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</p>
-          <p><strong>Dimensions (HxWxD):</strong> {`${dpp.height} x ${dpp.width} x ${dpp.depth}`}</p>
-          <p><strong>Weight:</strong> {dpp.weight}</p>
-          <p><strong>Material:</strong> {dpp.housingMaterial}</p>
-          <p><strong>Color:</strong> {dpp.color}</p>
-          <p><strong>Recyclability:</strong> {dpp.recyclability}</p>
-          <p><strong>Carbon Footprint:</strong> {dpp.carbonFootprint}</p>
-          <div className="mt-4">
-            <QRCode value={twinId} size={100} />
-          </div>
+          <h3 className="text-lg font-semibold mb-2">Digital Product Passport (DPP)</h3>
+          <ul className="text-sm text-gray-800 list-disc list-inside space-y-1">
+            <li>Manufacturer: {dpp.manufacturer}</li>
+            <li>Model: {dpp.model}</li>
+            <li>Serial Number: {dpp.serialNumber}</li>
+            <li>Product Code: {dpp.productCode}</li>
+            <li>Certifications: {dpp.markings.join(", ")}</li>
+            <li>Year: {dpp.yearOfManufacture}</li>
+            <li>Firmware: {dpp.firmwareVersion}</li>
+            <li>Installed: {dpp.installationDate}</li>
+            <li>Efficiency: {dpp.energyEfficiencyRating}</li>
+            <li>Voltage: {dpp.ratedVoltage}</li>
+            <li>Current: {dpp.ratedCurrent}</li>
+            <li>Power: {dpp.powerConsumption}</li>
+            <li>Temp Range: {dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</li>
+            <li>Size: {dpp.height} x {dpp.width} x {dpp.depth}</li>
+            <li>Weight: {dpp.weight}</li>
+            <li>Material: {dpp.housingMaterial}</li>
+            <li>Color: {dpp.color}</li>
+            <li>Recyclability: {dpp.recyclability}</li>
+            <li>Carbon Footprint: {dpp.carbonFootprint}</li>
+          </ul>
         </div>
       )}
 
