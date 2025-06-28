@@ -93,8 +93,8 @@ export default function SmartHVACApp() {
       </div>
 
       {dpp && (
-        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-2xl border border-gray-200">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Digital Product Passport (DPP)</h3>
+        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
+          <h3 className="text-lg font-semibold mb-2">Digital Product Passport (DPP)</h3>
           
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700">
             <div>
