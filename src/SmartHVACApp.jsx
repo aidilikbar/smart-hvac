@@ -93,29 +93,87 @@ export default function SmartHVACApp() {
       </div>
 
       {dpp && (
-        <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
-          <h3 className="text-lg font-semibold mb-2">Digital Product Passport (DPP)</h3>
-          <ul className="text-sm text-gray-800 list-disc list-inside space-y-1">
-            <li>Manufacturer: {dpp.manufacturer}</li>
-            <li>Model: {dpp.model}</li>
-            <li>Serial Number: {dpp.serialNumber}</li>
-            <li>Product Code: {dpp.productCode}</li>
-            <li>Certifications: {dpp.markings.join(", ")}</li>
-            <li>Year: {dpp.yearOfManufacture}</li>
-            <li>Firmware: {dpp.firmwareVersion}</li>
-            <li>Installed: {dpp.installationDate}</li>
-            <li>Efficiency: {dpp.energyEfficiencyRating}</li>
-            <li>Voltage: {dpp.ratedVoltage}</li>
-            <li>Current: {dpp.ratedCurrent}</li>
-            <li>Power: {dpp.powerConsumption}</li>
-            <li>Temp Range: {dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</li>
-            <li>Size: {dpp.height} x {dpp.width} x {dpp.depth}</li>
-            <li>Weight: {dpp.weight}</li>
-            <li>Material: {dpp.housingMaterial}</li>
-            <li>Color: {dpp.color}</li>
-            <li>Recyclability: {dpp.recyclability}</li>
-            <li>Carbon Footprint: {dpp.carbonFootprint}</li>
-          </ul>
+        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-2xl border border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Digital Product Passport (DPP)</h3>
+          
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700">
+            <div>
+              <dt className="font-medium text-gray-900">Manufacturer</dt>
+              <dd>{dpp.manufacturer}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Model</dt>
+              <dd>{dpp.model}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Serial Number</dt>
+              <dd>{dpp.serialNumber}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Product Code</dt>
+              <dd>{dpp.productCode}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Certifications</dt>
+              <dd>{dpp.markings.join(", ")}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Year</dt>
+              <dd>{dpp.yearOfManufacture}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Firmware</dt>
+              <dd>{dpp.firmwareVersion}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Installed</dt>
+              <dd>{dpp.installationDate}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Efficiency</dt>
+              <dd>{dpp.energyEfficiencyRating}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Voltage</dt>
+              <dd>{dpp.ratedVoltage}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Current</dt>
+              <dd>{dpp.ratedCurrent}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Power</dt>
+              <dd>{dpp.powerConsumption}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Temp Range</dt>
+              <dd>{dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Size</dt>
+              <dd>{dpp.height} x {dpp.width} x {dpp.depth}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Weight</dt>
+              <dd>{dpp.weight}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Material</dt>
+              <dd>{dpp.housingMaterial}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Color</dt>
+              <dd>{dpp.color}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Recyclability</dt>
+              <dd>{dpp.recyclability}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Carbon Footprint</dt>
+              <dd>{dpp.carbonFootprint}</dd>
+            </div>
+          </dl>
         </div>
       )}
 
