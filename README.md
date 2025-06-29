@@ -1,6 +1,6 @@
 # 🌬️ Smart HVAC System
 
-**Smart HVAC** is an IoT-enabled web application that simulates and monitors HVAC telemetry data in real time using **Azure Event Hub**, **PostgreSQL**, **React**, and **Express.js**. The data is published in **SAREF JSON-LD format**, aligned with EU Digital Product Passport (DPP) standards. This repository is for Smart Industry Systems class final project.
+**Smart HVAC** is an IoT-enabled web application that simulates and monitors HVAC telemetry data in real time using **Azure Event Hub**, **PostgreSQL**, **React**, and **Express.js**. The data is published in **SAREF JSON-LD format**, aligned with **EU Digital Product Passport (DPP)** standards. The system conceptually integrates **Digital Twin** principles, enabling virtual representation of physical HVAC behavior through live telemetry and semantic modeling. This repository was developed for the **Smart Industry Systems** class final project.
 
 [Smart HVAC Demo](https://smart-hvac.vercel.app/)
 
@@ -21,7 +21,6 @@
 ## 🧱 Project Structure
 
 <pre>
-```text
 smart-hvac/
 ├── api/                # Express API routes
 │   ├── dpp-metrics.js
@@ -36,7 +35,6 @@ smart-hvac/
 ├── public/
 ├── .env
 └── README.md
-```
 </pre>
 
 
