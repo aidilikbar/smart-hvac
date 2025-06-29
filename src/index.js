@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const dppMetricsRoute = require('./api/dpp-metrics');
+app.use('/api/dpp/metrics', dppMetricsRoute);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

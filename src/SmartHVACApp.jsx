@@ -12,6 +12,7 @@ export default function SmartHVACApp() {
   const [location, setLocation] = useState(null);
   const [controlMessage, setControlMessage] = useState('');
   const [dpp, setDpp] = useState(null);
+  const [dppMetrics, setDppMetrics] = useState({ totalEnergy: 0, lifetime: 0 });
 
   useEffect(() => {
     const fetchDpp = async () => {
@@ -24,6 +25,17 @@ export default function SmartHVACApp() {
       }
     };
     fetchDpp();
+  }, []);
+
+  useEffect(() => {
+    axios.get('/api/dpp/metrics')
+      .then(res => {
+        setDppMetrics({
+          totalEnergy: parseFloat(res.data.total_energy).toFixed(2),
+          lifetime: res.data.lifetime
+        });
+      })
+      .catch(err => console.error("Failed to fetch DPP metrics:", err));
   }, []);
 
   const handleStart = async () => {
@@ -184,6 +196,14 @@ export default function SmartHVACApp() {
             <div>
               <dt className="font-medium text-gray-900">Carbon Footprint</dt>
               <dd>{dpp.carbon_footprint}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Energy Consumption</dt>
+              <dd>{dppMetrics.totalEnergy} kWh</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-900">Lifetime</dt>
+              <dd>{dppMetrics.lifetime} s</dd>
             </div>
           </dl>
         </div>
