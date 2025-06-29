@@ -19,19 +19,18 @@
 ---
 
 ## 🧱 Project Structure
------------------
 
 smart-hvac/
-├── api/                      # Express API routes
+├── api/                # Express API routes
 │   ├── dpp-metrics.js
 │   ├── events.js
 │   └── publisher-control.js
-├── scripts/                 # Publisher & Subscriber scripts
+├── scripts/            # Publisher & Subscriber scripts
 │   ├── publisher.js
 │   └── subscriber.js
-├── src/                     # React frontend
+├── src/                # React frontend
 │   ├── SmartHVACApp.jsx
-│   └── index.js
+│   ├── index.js
 ├── public/
 ├── .env
 └── README.md
@@ -108,6 +107,7 @@ npm run listen-events
     }
   }
 }
+```
 
 ---
 
