@@ -37,7 +37,7 @@ export default function SmartHVACApp() {
 
     fetchMetrics(); // Initial fetch
 
-    const interval = setInterval(fetchMetrics, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchMetrics, 3000); // Poll every 3 seconds
     return () => clearInterval(interval); // Clean up on unmount
   }, []);
 
@@ -94,7 +94,7 @@ export default function SmartHVACApp() {
       } catch (error) {
         console.error("Event fetch error:", error);
       }
-    }, 3000);
+    }, 3000); // 3 seconds interval
     return () => clearInterval(interval);
   }, []);
 
