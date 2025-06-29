@@ -1,30 +1,36 @@
-const express = require('express');
-const router = express.Router();
-const { Client } = require('pg');
-require('dotenv').config();
+// /api/dpp-metrics.js
 
-const client = new Client({
+import { Pool } from 'pg';
+
+const pool = new Pool({
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: false }
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-client.connect();
-
-router.get('/', async (req, res) => {
+export default async function handler(req, res) {
   try {
-    const result = await client.query(`
-      SELECT SUM(energy) AS total_energy, COUNT(timestamp) AS lifetime
-      FROM telemetry
-    `);
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error("❌ Error fetching DPP metrics:", error);
-    res.status(500).json({ error: 'Failed to fetch DPP metrics' });
-  }
-});
+    const client = await pool.connect();
 
-module.exports = router;
+    const sumQuery = 'SELECT SUM(energy) AS total_energy, COUNT(*) AS lifetime FROM telemetry';
+    const result = await client.query(sumQuery);
+
+    client.release();
+
+    const totalEnergy = parseFloat(result.rows[0].total_energy).toFixed(2);
+    const lifetime = parseInt(result.rows[0].lifetime, 10);
+
+    res.status(200).json({
+      energyConsumption: `${totalEnergy} kWh`,
+      lifecycleCount: lifetime,
+    });
+  } catch (err) {
+    console.error('Error fetching DPP metrics:', err);
+    res.status(500).json({ error: 'Failed to fetch metrics' });
+  }
+}

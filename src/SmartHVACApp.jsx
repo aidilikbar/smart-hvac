@@ -12,7 +12,7 @@ export default function SmartHVACApp() {
   const [location, setLocation] = useState(null);
   const [controlMessage, setControlMessage] = useState('');
   const [dpp, setDpp] = useState(null);
-  const [dppMetrics, setDppMetrics] = useState({ totalEnergy: 0, lifetime: 0 });
+  const [metrics, setMetrics] = useState({ energyConsumption: '', lifecycleCount: 0 });
 
   useEffect(() => {
     const fetchDpp = async () => {
@@ -27,15 +27,11 @@ export default function SmartHVACApp() {
     fetchDpp();
   }, []);
 
+
   useEffect(() => {
-    axios.get('/api/dpp/metrics')
-      .then(res => {
-        setDppMetrics({
-          totalEnergy: parseFloat(res.data.total_energy).toFixed(2),
-          lifetime: res.data.lifetime
-        });
-      })
-      .catch(err => console.error("Failed to fetch DPP metrics:", err));
+    axios.get('/api/dpp-metrics')
+      .then(res => setMetrics(res.data))
+      .catch(err => console.error('Failed to load metrics:', err));
   }, []);
 
   const handleStart = async () => {
@@ -199,11 +195,11 @@ export default function SmartHVACApp() {
             </div>
             <div>
               <dt className="font-medium text-gray-900">Energy Consumption</dt>
-              <dd>{dppMetrics.totalEnergy} kWh</dd>
+              <dd>{metrics.energyConsumption || 'Loading...'}</dd>
             </div>
             <div>
-              <dt className="font-medium text-gray-900">Lifetime</dt>
-              <dd>{dppMetrics.lifetime} s</dd>
+              <dt className="font-medium text-gray-900">Lifecycle Events</dt>
+              <dd>{metrics.lifecycleCount || 'Loading...'}</dd>
             </div>
           </dl>
         </div>
