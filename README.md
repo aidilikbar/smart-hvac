@@ -44,17 +44,21 @@ smart-hvac/
 
 ### 1. Clone the repository
 
+```bash
 git clone https://gitlab.utwente.nl/s3490289/smart-hvac.git
 cd smart-hvac
+```
 
 ### 2. Install dependencies
 
+```bash
 npm install
-
+```
 ### 3. Configure Environment Variables
 
 Create a `.env` file in the root and define:
 
+```bash
 EVENT_HUB_CONNECTION_STRING={event_hub_connection_string}
 EVENT_HUB_NAME={event_hub_name}
 
@@ -63,20 +67,27 @@ DB_PASSWORD={db_password}
 DB_HOST={db_host}
 DB_PORT={db_port}
 DB_NAME={db_name}
+```
 
 ### 4. Run Local Development
 
 #### React Frontend
 
+```bash
 npm start
+```
 
 #### Simulate Publisher (send telemetry)
 
+```bash
 npm run publish-event
+```
 
 #### Start Event Listener (subscriber)
 
+```bash
 npm run listen-events
+```
 
 ---
 
