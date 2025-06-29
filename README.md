@@ -20,6 +20,8 @@
 
 ## 🧱 Project Structure
 
+<pre>
+```text
 smart-hvac/
 ├── api/                # Express API routes
 │   ├── dpp-metrics.js
@@ -34,6 +36,9 @@ smart-hvac/
 ├── public/
 ├── .env
 └── README.md
+```
+</pre>
+
 
 ---
 
@@ -125,7 +130,7 @@ npm run listen-events
 |----------------|-----------------------------------|
 | Frontend       | React, Tailwind CSS               |
 | Backend API    | Node.js, Express.js               |
-| Data Storage   | PostgreSQL (DigitalOcean)         |
+| Data Storage   | PostgreSQL                        |
 | Messaging Bus  | Azure Event Hub                   |
 | Semantic Model | JSON-LD + SAREF Ontology          |
 | Deployment     | Vercel (frontend)                 |
@@ -142,7 +147,7 @@ npm run listen-events
 
 ## 👨‍💻 Author
 
-**Aidil Ikbar (s349289)** – [@aidilikbar.com](https://aidilikbar.com) – [github.com/aidilikbar](https://github.com/aidilikbar)
+**Aidil Ikbar (s349289)** – [@aidilikbar.com](https://aidilikbar.com) | [github.com/aidilikbar](https://github.com/aidilikbar)
 
 ---
 
