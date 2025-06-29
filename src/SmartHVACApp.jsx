@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import QRCode from "react-qr-code";
+import React, { useState, useEffect } from 'react';
 
 const EVENT_HUB_API = "/api/events";
 
@@ -12,6 +13,19 @@ export default function SmartHVACApp() {
   const [location, setLocation] = useState(null);
   const [controlMessage, setControlMessage] = useState('');
   const [dpp, setDpp] = useState(null);
+
+  useEffect(() => {
+    const fetchDpp = async () => {
+      try {
+        const res = await fetch('/api/dpp');
+        const data = await res.json();
+        setDpp(data);
+      } catch (err) {
+        console.error('Failed to fetch DPP:', err);
+      }
+    };
+    fetchDpp();
+  }, []);
 
   const handleStart = async () => {
     try {
@@ -95,7 +109,6 @@ export default function SmartHVACApp() {
       {dpp && (
         <div className="bg-white shadow rounded p-4 w-full max-w-xl mb-6">
           <h3 className="text-lg font-semibold mb-2">Digital Product Passport (DPP)</h3>
-          
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm text-gray-700">
             <div>
               <dt className="font-medium text-gray-900">Manufacturer</dt>
@@ -107,47 +120,47 @@ export default function SmartHVACApp() {
             </div>
             <div>
               <dt className="font-medium text-gray-900">Serial Number</dt>
-              <dd>{dpp.serialNumber}</dd>
+              <dd>{dpp.serial_number}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Product Code</dt>
-              <dd>{dpp.productCode}</dd>
+              <dd>{dpp.product_code}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Certifications</dt>
-              <dd>{dpp.markings.join(", ")}</dd>
+              <dd>{dpp.markings.join(', ')}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Year</dt>
-              <dd>{dpp.yearOfManufacture}</dd>
+              <dd>{dpp.year_of_manufacture}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Firmware</dt>
-              <dd>{dpp.firmwareVersion}</dd>
+              <dd>{dpp.firmware_version}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Installed</dt>
-              <dd>{dpp.installationDate}</dd>
+              <dd>{dpp.installation_date}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Efficiency</dt>
-              <dd>{dpp.energyEfficiencyRating}</dd>
+              <dd>{dpp.energy_efficiency_rating}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Voltage</dt>
-              <dd>{dpp.ratedVoltage}</dd>
+              <dd>{dpp.rated_voltage}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Current</dt>
-              <dd>{dpp.ratedCurrent}</dd>
+              <dd>{dpp.rated_current}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Power</dt>
-              <dd>{dpp.powerConsumption}</dd>
+              <dd>{dpp.power_consumption}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Temp Range</dt>
-              <dd>{dpp.minOperatingTemp} to {dpp.maxOperatingTemp}</dd>
+              <dd>{dpp.min_operating_temp} to {dpp.max_operating_temp}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Size</dt>
@@ -159,7 +172,7 @@ export default function SmartHVACApp() {
             </div>
             <div>
               <dt className="font-medium text-gray-900">Material</dt>
-              <dd>{dpp.housingMaterial}</dd>
+              <dd>{dpp.housing_material}</dd>
             </div>
             <div>
               <dt className="font-medium text-gray-900">Color</dt>
@@ -171,7 +184,7 @@ export default function SmartHVACApp() {
             </div>
             <div>
               <dt className="font-medium text-gray-900">Carbon Footprint</dt>
-              <dd>{dpp.carbonFootprint}</dd>
+              <dd>{dpp.carbon_footprint}</dd>
             </div>
           </dl>
         </div>
