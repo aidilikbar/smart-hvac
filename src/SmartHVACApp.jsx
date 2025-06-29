@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import QRCode from "react-qr-code";
-import React, { useState, useEffect } from 'react';
 
 const EVENT_HUB_API = "/api/events";
 
