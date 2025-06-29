@@ -25,25 +25,48 @@ db.connect().then(() => {
   console.error("❌ PostgreSQL connection error:", err);
 });
 
-// Generate Telemetry
+// Generate SAREF-Compliant Telemetry
 function generateTelemetryData() {
   const temperature = 20 + Math.random() * 10;
   const humidity = 40 + Math.random() * 20;
+  const energy = (temperature * 0.15 + humidity * 0.05).toFixed(2);
+  const now = new Date().toISOString();
+  const latitude = 52.2394;
+  const longitude = 6.8529;
 
   return {
-    timestamp: new Date().toISOString(),
+    "@context": "https://saref.etsi.org/core",
+    "@type": "saref:Sensor",
+    timestamp: now,
     temperature: temperature.toFixed(2),
     humidity: humidity.toFixed(1),
-    energy: (temperature * 0.15 + humidity * 0.05).toFixed(2),
+    energy: energy,
     status: "OK",
     location: {
-      latitude: 52.2394,
-      longitude: 6.8529,
+      latitude,
+      longitude
     },
+    "saref:measuresProperty": {
+      temperature: {
+        "@type": "saref:Temperature",
+        "saref:hasValue": temperature.toFixed(2),
+        "saref:hasUnit": "Celsius"
+      },
+      humidity: {
+        "@type": "saref:Humidity",
+        "saref:hasValue": humidity.toFixed(1),
+        "saref:hasUnit": "Percent"
+      },
+      energy: {
+        "@type": "saref:Energy",
+        "saref:hasValue": energy,
+        "saref:hasUnit": "kWh"
+      }
+    }
   };
 }
 
-// Save to DB
+// Save core data to DB (JSON-LD is not saved in full)
 async function saveToDatabase(data) {
   const query = `
     INSERT INTO public.telemetry (
@@ -68,7 +91,7 @@ async function saveToDatabase(data) {
   }
 }
 
-// Publish Event and Save to DB
+// Send to Azure + Save to DB
 async function sendEvent() {
   const eventData = generateTelemetryData();
 
@@ -76,13 +99,13 @@ async function sendEvent() {
   batch.tryAdd({ body: eventData });
 
   await producer.sendBatch(batch);
-  console.log("🚀 Event sent:", eventData);
+  console.log("🚀 SAREF Event sent:", eventData);
 
   await saveToDatabase(eventData);
 }
 
-// ⏱ Run every 1 second
-console.log("⏳ Publishing telemetry data every 1 second...");
+// Repeat every second
+console.log("⏳ Publishing SAREF-formatted telemetry data every 1 second...");
 setInterval(() => {
   sendEvent().catch((err) => {
     console.error("❌ Error sending event:", err);
