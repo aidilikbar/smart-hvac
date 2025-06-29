@@ -2,7 +2,7 @@
 
 **Smart HVAC** is an IoT-enabled web application that simulates and monitors HVAC telemetry data in real time using **Azure Event Hub**, **PostgreSQL**, **React**, and **Express.js**. The data is published in **SAREF JSON-LD format**, aligned with EU Digital Product Passport (DPP) standards. This repository is for Smart Industry Systems class final project.
 
-![Smart HVAC Demo](https://smart-hvac.vercel.app/)
+[Smart HVAC Demo](https://smart-hvac.vercel.app/)
 
 ---
 
@@ -19,6 +19,7 @@
 ---
 
 ## 🧱 Project Structure
+-----------------
 
 smart-hvac/
 ├── api/                      # Express API routes
@@ -79,6 +80,7 @@ npm run listen-events
 
 ## 🔎 Example SAREF JSON-LD Telemetry
 
+```json
 {
   "@context": "https://saref.etsi.org/core",
   "@type": "saref:Sensor",
@@ -140,7 +142,7 @@ npm run listen-events
 
 ## 👨‍💻 Author
 
-**Aidil Ikbar (s349289)** – [@aidilikbar.com](https://aidilikbar.com)
+**Aidil Ikbar (s349289)** – [@aidilikbar.com](https://aidilikbar.com) – [github.com/aidilikbar](https://github.com/aidilikbar)
 
 ---
 
