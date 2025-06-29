@@ -29,9 +29,16 @@ export default function SmartHVACApp() {
 
 
   useEffect(() => {
-    axios.get('/api/dpp-metrics')
-      .then(res => setMetrics(res.data))
-      .catch(err => console.error('Failed to load metrics:', err));
+    const fetchMetrics = () => {
+      axios.get('/api/dpp-metrics')
+        .then(res => setMetrics(res.data))
+        .catch(err => console.error('Failed to load metrics:', err));
+    };
+
+    fetchMetrics(); // Initial fetch
+
+    const interval = setInterval(fetchMetrics, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Clean up on unmount
   }, []);
 
   const handleStart = async () => {
