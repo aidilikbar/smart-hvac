@@ -98,6 +98,20 @@ export default function SmartHVACApp() {
     return () => clearInterval(interval);
   }, []);
 
+  function formatDuration(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const parts = [];
+    if (hours > 0) parts.push(`${hours} hr${hours !== 1 ? 's' : ''}`);
+    if (minutes > 0) parts.push(`${minutes} min${minutes !== 1 ? 's' : ''}`);
+    if (seconds > 0 || parts.length === 0)
+      parts.push(`${seconds} sec${seconds !== 1 ? 's' : ''}`);
+
+    return parts.join(' ');
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
       <h1 className="text-2xl font-bold mb-4">Smart HVAC Dashboard - Group 7</h1>
@@ -206,7 +220,11 @@ export default function SmartHVACApp() {
             </div>
             <div>
               <dt className="font-medium text-gray-900">Lifecycle Events</dt>
-              <dd>{metrics.lifecycleCount || 'Loading...'}</dd>
+              <dd>
+                {metrics.lifecycleCount != null
+                  ? formatDuration(metrics.lifecycleCount)
+                  : 'Loading...'}
+              </dd>
             </div>
           </dl>
         </div>
