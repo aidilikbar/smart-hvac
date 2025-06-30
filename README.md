@@ -71,10 +71,10 @@ DB_NAME={db_name}
 
 ### 4. Run Local Development
 
-#### React Frontend
+#### Start Event Listener (subscriber)
 
 ```bash
-npm start
+npm run listen-events
 ```
 
 #### Simulate Publisher (send telemetry)
@@ -83,10 +83,10 @@ npm start
 npm run publish-event
 ```
 
-#### Start Event Listener (subscriber)
+#### Start HVAC Remote Control
 
 ```bash
-npm run listen-events
+npm run control-server
 ```
 
 ---
