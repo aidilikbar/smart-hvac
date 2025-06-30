@@ -150,7 +150,7 @@ npm run control-server
 
 - [SAREF Ontology](https://saref.etsi.org/core/)
 - [Azure Event Hub Docs](https://learn.microsoft.com/en-us/azure/event-hubs/)
-- [EU Digital Product Passport](https://single-market-economy.ec.europa.eu/sustainability/product-policy-and-ecodesign/digital-product-passport_en)
+- EU Digital Product Passport based on [Ecodesign for Sustainable Products Regulation (ESPR)](https://commission.europa.eu/energy-climate-change-environment/standards-tools-and-labels/products-labelling-rules-and-requirements/ecodesign-sustainable-products-regulation_en)
 
 ---
 
